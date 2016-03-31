@@ -1,6 +1,7 @@
 var MongoClient = require('mongodb').MongoClient,
 	settings = require('./config.js'),
-	Guid = require('Guid');
+	Guid = require('Guid'),
+	bcrypt = require("bcrypt-nodejs");
 
 
 var fullMongoUrl = settings.mongoConfig.serverUrl + settings.mongoConfig.database;
@@ -28,12 +29,27 @@ MongoClient.connect(fullMongoUrl)
         	});
         };
 
+        exports.findUserByUserNameAndPassword = function(username, password) {
+        	return userCollection.find({username: username}).limit(1).toArray().then(function(listOfUser) {
+        		if(listOfUser.length === 0) {
+        			return Promise.reject("User doesn't exist!");
+        		} else {
+        			var user = listOfUser[0];
+        			if(bcrypt.compareSync(password, user.encryptedPassword)){
+						return user;
+					} else {
+						return Promise.reject("Password doesn't match!");
+					}
+        		}
+        	});
+        };
+
         exports.findUserByUserName = function(username) {
         	return userCollection.find({username: username}).limit(1).toArray().then(function(listOfUser) {
         		if(listOfUser.length === 0) {
         			return Promise.reject("User doesn't exist!");
         		} else {
-        			return listOfUser[0];
+        			return Promise.accept("User exists");
         		}
         	});
         };

@@ -3,7 +3,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var userData = require('./data.js');
-var bcrypt = require("bcrypt-nodejs");
 var Guid = require('Guid');
 
 // This package exports the function to create an express instance:
@@ -86,29 +85,19 @@ app.post("/login", function (request, response) {
 	if(!request.body.username || !request.body.password) {
 		response.render("pages/home", {pageTitle: "User name and password cannot be empty."});
 	}
-	userData.findUserByUserName(request.body.username).then(function(user) {
-		// compare the password
-		bcrypt.compare(request.body.password, user.encryptedPassword, function (err, res) {
-		    if (res === true) {
-		        console.log("Password matches!");
-		        // matched. create a new session id
-		        sessionId = Guid.create().toString();
-		        userData.updateSession(request.body.username, sessionId);
+	userData.findUserByUserNameAndPassword(request.body.username, request.body.password).then(function(user) {
+		// matched. create a new session id
+		sessionId = Guid.create().toString();
+		userData.updateSession(request.body.username, sessionId);
 
-		        // create a cookie
-		        var expireAt = new Date();
-        		expireAt.setHours(expireAt.getHours()+2);
-        		response.cookie("session", sessionId, { expires: expireAt })
-        		response.redirect("/profile");
-		    } else {
-		        //console.log("Password doesn't match!");
-		        //response.redirect("/");
-		        response.render("pages/home", {pageTitle: "Password doesn't match."});
-		    }
-		});
+		// create a cookie
+		var expireAt = new Date();
+      	expireAt.setHours(expireAt.getHours()+2);
+        response.cookie("session", sessionId, { expires: expireAt });
+        response.redirect("/profile");
 	}, function(error) {
 		//console.log(error);
-		response.render("pages/home", {pageTitle: "User name doesn't exist."});
+		response.render("pages/home", {pageTitle: error});
 	});
 });
 
@@ -131,7 +120,7 @@ app.post("/signup", function (request, response) {
 });
 
 app.post("/logout", function (request, response) { 
-	console.log("session expired");
+	//console.log("session expired");
 	var expiresAt = new Date();
 	expiresAt.setHours(expiresAt.getHours()-1);
 	response.cookie("session", "", { expires: expiresAt });
