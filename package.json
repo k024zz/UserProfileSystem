@@ -18,6 +18,8 @@
   "homepage": "https://github.com/Stevens-CS546/Boilerplate#readme",
   "dependencies": {
     "body-parser": "^1.14.2",
+    "cookie-parser": "^1.4.1",
+    "bcrypt-nodejs": "^0.0.3",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "guid": "0.0.12",

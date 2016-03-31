@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head %>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+        </header>
+        <main>
+            <h2><%= pageTitle %></h2>
+            <!-- Let's start writing content! -->    
+            <div>
+                <div>
+                    <h5>Log in</h5>
+                    <form action="/login" method="post">
+                        User name:<br>
+                        <input type="text" name="username"><br>
+                        Password:<br>
+                        <input type="text" name="password"><br>
+                        <input type="submit" value="Log in">
+                    </form>
+                </div>
+                <div>
+                    <h5>Sign up</h5>
+                    <form action="/signup" method="post">
+                        User name:<br>
+                        <input type="text" name="username"><br>
+                        Password:<br>
+                        <input type="text" name="password"><br>
+                        <input type="submit" value="Sign up">
+                    </form>
+                </div>
+                <div>
+                    <form action="/logout" method="post">
+                        <input type="submit" value="Log out">
+                    </form>
+                </div>
+            </div>    
+        </main>
+    </div>
+
+    <% include ../partials/scripts %>
+</body>
+
+</html>

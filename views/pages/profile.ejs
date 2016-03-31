@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head %>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+        </header>
+        <main>
+            <h2><%= pageTitle %></h2>
+            <!-- Let's start writing content! -->
+            <div>
+                <div>
+                    <ul>
+                        <li>First Name : <%= profile.firstName %></li>
+                        <li>Last Name : <%= profile.lastName %></li>
+                        <li>Hobby : <%= profile.hobby %></li>
+                        <li>Pet Name : <%= profile.petName %></li>
+                    </ul>
+                </div>
+                <div>
+                    <form action="/updateProfile" method="post">
+                        First Name:<input type="text" name="firstname"><br>
+                        Last Name:<input type="text" name="lastname"><br>
+                        Hobby:<input type="text" name="hobby"><br>
+                        Pet Name:<input type="text" name="petname"><br>
+                        <input type="submit" value="Update Profile">
+                    </form>
+                </div>
+                <div>
+                    <form action="/logout" method="post">
+                        <input type="submit" value="Log out">
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <% include ../partials/scripts %>
+</body>
+
+</html>
