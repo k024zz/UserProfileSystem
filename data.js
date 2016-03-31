@@ -20,13 +20,13 @@ MongoClient.connect(fullMongoUrl)
         	return userCollection.updateOne({ username: username}, { $set: {currentSessionId: sessionId} }).then(function() {
         		return exports.findUserByUserName(username);
         	});
-        }
+        };
 
         exports.updateProfile = function(sessionId, profile) {
         	return userCollection.updateOne({ currentSessionId: sessionId}, { $set: {profile: profile} }).then(function() {
         		return exports.findUserBySessionId(sessionId);
         	});
-        }
+        };
 
         exports.findUserByUserName = function(username) {
         	return userCollection.find({username: username}).limit(1).toArray().then(function(listOfUser) {

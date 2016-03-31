@@ -83,6 +83,9 @@ app.post("/updateProfile", function (request, response) {
 });
 
 app.post("/login", function (request, response) { 
+	if(!request.body.username || !request.body.password) {
+		response.render("pages/home", {pageTitle: "User name and password cannot be empty."});
+	}
 	userData.findUserByUserName(request.body.username).then(function(user) {
 		// compare the password
 		bcrypt.compare(request.body.password, user.encryptedPassword, function (err, res) {
@@ -98,23 +101,27 @@ app.post("/login", function (request, response) {
         		response.cookie("session", sessionId, { expires: expireAt })
         		response.redirect("/profile");
 		    } else {
-		        console.log("Password doesn't match!");
-		        response.redirect("/");
+		        //console.log("Password doesn't match!");
+		        //response.redirect("/");
+		        response.render("pages/home", {pageTitle: "Password doesn't match."});
 		    }
 		});
 	}, function(error) {
-		console.log(error);
-		response.redirect("/");
+		//console.log(error);
+		response.render("pages/home", {pageTitle: "User name doesn't exist."});
 	});
 });
 
-app.post("/signup", function (request, response) { 
+app.post("/signup", function (request, response) {
+	if(!request.body.username || !request.body.password) {
+		response.render("pages/home", {pageTitle: "User name and password cannot be empty."});
+	}
 	// check if the user name exists
 	userData.findUserByUserName(request.body.username).then(function() {
 		// if exists, reject
-		console.log("User name exist!");
-		response.redirect("/")
-    	//response.render("pages/login", { pageTitle: "User Profile System"});
+		//console.log("User name exists!");
+		//response.redirect("/")
+    	response.render("pages/home", {pageTitle: "User name exists."});
 	}, function() {
 		// if not, create a new user
 		var encryptedPassword = bcrypt.hashSync(request.body.password);
