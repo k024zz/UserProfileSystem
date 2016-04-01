@@ -2,6 +2,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var bcrypt = require("bcrypt-nodejs");
 var userData = require('./data.js');
 var Guid = require('Guid');
 
