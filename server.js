@@ -31,7 +31,6 @@ app.get("/", function (request, response) {
 			response.redirect("/profile");
 		}, function() {
 			// session expired. clear cookies
-			console.log("session expired");
 			var expiresAt = new Date();
 			expiresAt.setHours(expiresAt.getHours()-1);
 			response.cookie("session", "", { expires: expiresAt });
@@ -71,7 +70,6 @@ app.post("/updateProfile", function (request, response) {
 			});
 		}, function() {
 			// session expired. clear cookies
-			//console.log("session expired");
 			var expiresAt = new Date();
 			expiresAt.setHours(expiresAt.getHours()-1);
 			response.cookie("session", "", { expires: expiresAt });
@@ -94,6 +92,11 @@ app.post("/login", function (request, response) {
 		var expireAt = new Date();
       	expireAt.setHours(expireAt.getHours()+2);
         response.cookie("session", sessionId, { expires: expireAt });
+
+        // store user
+        response.locals.user = user;
+        //console.log(user);
+
         response.redirect("/profile");
 	}, function(error) {
 		//console.log(error);
@@ -120,11 +123,11 @@ app.post("/signup", function (request, response) {
 });
 
 app.post("/logout", function (request, response) { 
-	//console.log("session expired");
 	var expiresAt = new Date();
 	expiresAt.setHours(expiresAt.getHours()-1);
 	response.cookie("session", "", { expires: expiresAt });
 	response.clearCookie("session");
+	response.locals.user = undefined;
 	response.redirect("/");
 });
 
